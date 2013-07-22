@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Compass</string>
+    <string-array name="direction_abbreviations">
+        <item>N</item>
+        <item>NNE</item>
+        <item>NE</item>
+        <item>ENE</item>
+        <item>E</item>
+        <item>ESE</item>
+        <item>SE</item>
+        <item>SSE</item>
+        <item>S</item>
+        <item>SSW</item>
+        <item>SW</item>
+        <item>WSW</item>
+        <item>W</item>
+        <item>WNW</item>
+        <item>NW</item>
+        <item>NNW</item>
+    </string-array>
+    <string-array name="spoken_directions">
+        <item>north</item>
+        <item>north north east</item>
+        <item>north east</item>
+        <item>east north east</item>
+        <item>east</item>
+        <item>east south east</item>
+        <item>south east</item>
+        <item>south south east</item>
+        <item>south</item>
+        <item>south south west</item>
+        <item>south west</item>
+        <item>west south west</item>
+        <item>west</item>
+        <item>west north west</item>
+        <item>north west</item>
+        <item>north north west</item>
+    </string-array>
+    <string name="display_bearing_format">%1$d\u00B0\n%2$s</string>
+    <string name="spoken_bearing_format">%1$d degrees %2$s</string>
+    
+</resources>
