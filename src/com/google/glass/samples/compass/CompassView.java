@@ -26,20 +26,25 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Draws a stylized compass. The red needle of the compass always points north.
+ * Draws a stylized compass, with text labels at the cardinal and ordinal
+ * directions, and tick marks at the half-winds. The red "needles" in the
+ * display mark the current heading.
  */
 public class CompassView extends View {
 
-  private static final int BG_ARROW_COLOR = Color.rgb(64, 64, 64);
-  private static final int SOUTH_COLOR = Color.rgb(192, 192, 192);
-  private static final int NORTH_COLOR = Color.rgb(255, 0, 0);
+  private static final float NEEDLE_WIDTH = 6;
+  private static final float NEEDLE_HEIGHT = 125;
+  private static final int NEEDLE_COLOR = Color.RED;
+  private static final float TICK_WIDTH = 2;
+  private static final float TICK_HEIGHT = 10;
+  private static final float TEXT_HEIGHT = 84.0f;
 
-  private double mBearing;
-  private Path mLightArrowPath;
-  private Path mDarkArrowPath;
+  private String[] mDirections;
+  private float mHeading;
   private Paint mPaint;
+  private Paint mTickPaint;
+  private Path mPath;
   private Rect mTextBounds;
-  private String mNorthLabel;
 
   public CompassView(Context context) {
     this(context, null, 0);
@@ -55,129 +60,115 @@ public class CompassView extends View {
     mPaint = new Paint();
     mPaint.setStyle(Paint.Style.FILL);
     mPaint.setAntiAlias(true);
-    mPaint.setTextSize(22.0f);
+    mPaint.setTextSize(TEXT_HEIGHT);
 
-    mLightArrowPath = new Path();
-    mDarkArrowPath = new Path();
+    mTickPaint = new Paint();
+    mTickPaint.setStyle(Paint.Style.STROKE);
+    mTickPaint.setStrokeWidth(TICK_WIDTH);
+    mTickPaint.setAntiAlias(true);
+    mTickPaint.setColor(Color.WHITE);
 
-    // Retrieve the string that will be used to label the north end of the
-    // needle and measure it for later.
-    mNorthLabel = context.getResources().getStringArray(R.array.direction_abbreviations)[0];
+    mPath = new Path();
     mTextBounds = new Rect();
-    mPaint.getTextBounds(mNorthLabel, 0, mNorthLabel.length(), mTextBounds);
+
+    mDirections = context.getResources().getStringArray(R.array.direction_abbreviations);
   }
 
   /**
-   * Gets the current bearing in degrees.
+   * Gets the current heading in degrees.
    * 
-   * @return the current bearing.
+   * @return the current heading.
    */
-  public double getBearing() {
-    return mBearing;
+  public float getHeading() {
+    return mHeading;
   }
 
   /**
-   * Sets the current bearing in degrees and redraws the compass.
+   * Sets the current heading in degrees and redraws the compass. If the angle
+   * is not between 0 and 360, it is shifted to be in that range.
    * 
-   * @param degrees the current bearing.
+   * @param degrees the current heading.
    */
-  public void setBearing(double degrees) {
-    mBearing = degrees;
+  public void setHeading(float degrees) {
+    mHeading = MathUtils.mod(degrees, 360.0f);
     invalidate();
   }
-
+  
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
 
-    float width = getWidth();
-    float centerX = width / 2f;
-    float centerY = getHeight() / 2f;
-    float distance = Math.min(width, getHeight()) - mTextBounds.height() * 2f;
+    // The view displays 90 degrees across its width so that one 90 degree
+    // head rotation is equal to one full view cycle.
+    float pixelsPerDegree = getWidth() / 90.0f;
+    float degreesPerTick = 360.0f / mDirections.length;
+    float centerX = getWidth() / 2.0f;
+    float centerY = getHeight() / 2.0f;
 
-    float largeGirth = width * 0.10f;
-    float smallGirth = width * 0.075f;
-
-    // Draw the arrows that represent the four cardinal directions.
-    for (int i = 0; i < 4; i++) {
-      drawArrow(canvas, i * 90, centerX, centerY, distance / 2, largeGirth, BG_ARROW_COLOR);
-    }
-
-    // Draw the arrows that represent the four ordinal directions.
-    for (int i = 0; i < 4; i++) {
-      drawArrow(canvas, i * 90 + 45, centerX, centerY, distance / 2.5f, smallGirth,
-          BG_ARROW_COLOR);
-    }
-
-    // Draw the compass needles that point north and south.
-    drawArrow(canvas, mBearing, centerX, centerY, distance / 2, largeGirth, NORTH_COLOR);
-    drawArrow(canvas, mBearing + 180, centerX, centerY, distance / 2, largeGirth, SOUTH_COLOR);
-
-    // Draw the small "joint" about which the needle rotates.
-    mPaint.setColor(Color.LTGRAY);    
-    canvas.drawCircle(centerX, centerY, width * 0.03f, mPaint);
-
-    // Draw the north indicator at the end of the needle.
     canvas.save();
-    canvas.rotate((float) (360 - mBearing), centerX, centerY);    
+    canvas.translate(-mHeading * pixelsPerDegree + centerX, centerY);
+
     mPaint.setColor(Color.WHITE);
-    canvas.drawText(mNorthLabel, centerX - mTextBounds.width() / 2, mTextBounds.height() * 1.5f,
-        mPaint);
-    canvas.save();
-  }
 
-  /**
-   * Draws a triangular arrow on the canvas.
-   * 
-   * @param canvas the canvas on which to draw the arrow.
-   * @param angle the angle at which to draw the arrow.
-   * @param x the x-coordinate of the center of the <em>base</em> of the arrow.
-   * @param y the y-coordinate of the center of the <em>base</em> of the arrow.
-   * @param distance the length of the arrow from its base.
-   * @param girth the "girth" (width) of the arrow.
-   * @param mPaint the {@code Paint} object used to describe the arrow's appearance.
-   */
-  private void drawArrow(Canvas canvas, double angle, float x, float y, float distance,
-      float girth, int color) {
-    // Construct two paths -- one for the light side of the arrow and one for
-    // the dark side -- to obtain a soft 3D effect.
-    mLightArrowPath.reset();
-    mLightArrowPath.moveTo(x, y);
-    mLightArrowPath.lineTo(x - girth / 2, y);
-    mLightArrowPath.lineTo(x, y - distance);
-    mLightArrowPath.close();
+    // We draw two extra ticks/labels on each side of the view so that the
+    // full range is visible even when the heading is approximately 0.
+    for (int i = -2; i <= mDirections.length + 2; i++) {
+      if (MathUtils.mod(i, 2) == 0) {
+        // Draw a text label for the even indices.
+        String direction = mDirections[MathUtils.mod(i, mDirections.length)];
+        mPaint.getTextBounds(direction, 0, direction.length(), mTextBounds);
 
-    mDarkArrowPath.reset();
-    mDarkArrowPath.moveTo(x, y - distance);
-    mDarkArrowPath.lineTo(x + girth / 2, y);
-    mDarkArrowPath.lineTo(x, y);
-    mDarkArrowPath.close();
-
-    // Rotate the canvas to the requested angle and draw the arrow path. Note
-    // that we rotate the canvas in the opposite direction as the desired
-    // bearing so that the compass needle will always point north.
-    canvas.save();
-    canvas.rotate((float) (360 - angle), x, y);
-
-    // Draw both sides of the arrow.
-    mPaint.setColor(color);
-    canvas.drawPath(mLightArrowPath, mPaint);
-    mPaint.setColor(darkenColor(color));
-    canvas.drawPath(mDarkArrowPath, mPaint);
+        canvas.drawText(direction, i * degreesPerTick * pixelsPerDegree - mTextBounds.width() / 2,
+            mTextBounds.height() / 2, mPaint);
+      }
+      else {
+        // Draw a tick mark for the odd indices.
+        canvas.drawLine(i * degreesPerTick * pixelsPerDegree, -TICK_HEIGHT / 2,
+            i * degreesPerTick * pixelsPerDegree, TICK_HEIGHT / 2, mTickPaint);
+      }
+    }
 
     canvas.restore();
+
+    mPaint.setColor(NEEDLE_COLOR);
+    drawNeedle(canvas, false);
+    drawNeedle(canvas, true);
   }
-  
+
   /**
-   * Returns a color that is 70% as bright as the specified color.
-   *  
-   * @param color the color to darken.
-   * @return the darkened version of the color.
+   * Draws a needle that is centered at the top or bottom of the compass.
+   * 
+   * @param canvas the {@link Canvas} upon which to draw.
+   * @param bottom true to draw the bottom needle, or false to draw the top
+   *     needle.
    */
-  private static int darkenColor(int color) {
-    int r = (int) (Color.red(color) * 0.7);
-    int g = (int) (Color.green(color) * 0.7);
-    int b = (int) (Color.blue(color) * 0.7);
-    return Color.rgb(r, g, b);
+  private void drawNeedle(Canvas canvas, boolean bottom) {
+    float centerX = getWidth() / 2.0f;
+
+    float origin;
+    float sign;
+
+    // Flip the vertical coordinates if we're drawing the bottom needle.
+    if (bottom) {
+      origin = getHeight();
+      sign = -1;
+    }
+    else {
+      origin = 0;
+      sign = 1;
+    }
+
+    float needleHalfWidth = NEEDLE_WIDTH / 2;
+
+    mPath.reset();
+    mPath.moveTo(centerX - needleHalfWidth, origin);
+    mPath.lineTo(centerX - needleHalfWidth, origin + sign * (NEEDLE_HEIGHT - 4));
+    mPath.lineTo(centerX, origin + sign * NEEDLE_HEIGHT);
+    mPath.lineTo(centerX + needleHalfWidth, origin + sign * (NEEDLE_HEIGHT - 4));
+    mPath.lineTo(centerX + needleHalfWidth, origin);
+    mPath.close();
+    
+    canvas.drawPath(mPath, mPaint);
   }
 }
+

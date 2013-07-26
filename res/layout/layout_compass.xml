@@ -1,21 +1,12 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     android:background="@color/black"
-    android:padding="20dp"
     tools:context=".CompassActivity" >
     <com.google.glass.samples.compass.CompassView
         android:id="@+id/compass"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-    <TextView
-        android:id="@+id/bearing"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textSize="@dimen/bearing_text_size" />
-</LinearLayout>
+        android:layout_height="match_parent" />
+</FrameLayout>

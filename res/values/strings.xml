@@ -38,7 +38,6 @@
         <item>north west</item>
         <item>north north west</item>
     </string-array>
-    <string name="display_bearing_format">%1$d\u00B0\n%2$s</string>
-    <string name="spoken_bearing_format">%1$d degrees %2$s</string>
+    <string name="spoken_heading_format">%1$d degrees %2$s</string>
     
 </resources>
