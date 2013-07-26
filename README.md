@@ -5,7 +5,7 @@ Simple APK Glassware acting as a compass. In addition to the visual display, you
 
 ## Getting started
 
-Checkout our documentation to learn how to get started on https://developers.google.com/glass/apk
+Checkout our documentation to learn how to get started on https://developers.google.com/glass/gdk
 
 ## Running the APK on Glass
 
