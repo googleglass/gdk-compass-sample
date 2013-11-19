@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
 <resources>
 
-    <string name="app_name">Compass</string>
+    <!-- Launch-related strings. -->
+    <string name="app_name">Compass Sample</string>
+    <string name="show_compass_voice_trigger">show a compass</string>
+
+    <!-- Strings describing locations. -->
     <string-array name="direction_abbreviations">
         <item>N</item>
         <item>NNE</item>
@@ -20,6 +39,11 @@
         <item>NW</item>
         <item>NNW</item>
     </string-array>
+
+    <!-- Spoken strings. -->
+    <string name="spoken_heading_format">%1$d degrees %2$s</string>
+    <string name="spoken_heading_format_one">%1$d degree %2$s</string>
+    <string name="place_text_format">%1$s (%2$s km)</string>
     <string-array name="spoken_directions">
         <item>north</item>
         <item>north north east</item>
@@ -38,6 +62,13 @@
         <item>north west</item>
         <item>north north west</item>
     </string-array>
-    <string name="spoken_heading_format">%1$d degrees %2$s</string>
-    
+
+    <!-- Warning messages. -->
+    <string name="pitch_too_steep">Keep Glass horizontal to use the compass</string>
+    <string name="magnetic_interference">Glass is detecting too much interference</string>
+
+    <!-- Menu item strings. -->
+    <string name="read_aloud">Read aloud</string>
+    <string name="stop">Stop</string>
+
 </resources>

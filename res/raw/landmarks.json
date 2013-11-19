@@ -1,0 +1,14 @@
+{
+    "landmarks": [
+        {
+            "name": "Google Headquarters",
+            "latitude": 37.4221394,
+            "longitude": -122.08398
+        },
+        {
+            "name": "Shoreline Amphitheatre",
+            "latitude": 37.426778,
+            "longitude": -122.080733
+        }
+    ]
+}
