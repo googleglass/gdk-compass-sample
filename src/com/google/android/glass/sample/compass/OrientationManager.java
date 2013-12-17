@@ -54,7 +54,7 @@ public class OrientationManager {
      * The maximum age of a location retrieved from the passive location provider before it is
      * considered too old to use when the compass first starts up.
      */
-    private static final long MAX_LOCATION_AGE_NANOS = TimeUnit.MINUTES.toNanos(30);
+    private static final long MAX_LOCATION_AGE_MILLIS = TimeUnit.MINUTES.toMillis(30);
 
     /**
      * The sensors used by the compass are mounted in the movable arm on Glass. Depending on how
@@ -224,7 +224,7 @@ public class OrientationManager {
                     .getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             if (lastLocation != null) {
                 long locationAge = lastLocation.getTime() - System.currentTimeMillis();
-                if (locationAge < MAX_LOCATION_AGE_NANOS) {
+                if (locationAge < MAX_LOCATION_AGE_MILLIS) {
                     mLocation = lastLocation;
                     updateGeomagneticField();
                 }

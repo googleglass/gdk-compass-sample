@@ -20,6 +20,7 @@ import com.google.android.glass.sample.compass.model.Landmarks;
 import com.google.android.glass.sample.compass.model.Place;
 import com.google.android.glass.sample.compass.util.MathUtils;
 import com.google.android.glass.timeline.LiveCard;
+import com.google.android.glass.timeline.LiveCard.PublishMode;
 import com.google.android.glass.timeline.TimelineManager;
 
 import android.app.PendingIntent;
@@ -114,18 +115,17 @@ public class CompassService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (mLiveCard == null) {
-            mLiveCard = mTimelineManager.getLiveCard(LIVE_CARD_ID);
+            mLiveCard = mTimelineManager.createLiveCard(LIVE_CARD_ID);
             mRenderer = new CompassRenderer(this, mOrientationManager, mLandmarks);
 
-            mLiveCard.enableDirectRendering(true).getSurfaceHolder().addCallback(mRenderer);
-            mLiveCard.setNonSilent(true);
+            mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(mRenderer);
 
             // Display the options menu when the live card is tapped.
             Intent menuIntent = new Intent(this, CompassMenuActivity.class);
             menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
 
-            mLiveCard.publish();
+            mLiveCard.publish(PublishMode.REVEAL);
         }
 
         return START_STICKY;
