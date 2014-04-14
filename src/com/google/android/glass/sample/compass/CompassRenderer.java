@@ -18,11 +18,11 @@ package com.google.android.glass.sample.compass;
 
 import com.google.android.glass.sample.compass.model.Landmarks;
 import com.google.android.glass.sample.compass.model.Place;
+import com.google.android.glass.timeline.DirectRenderingCallback;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.SystemClock;
 import android.util.Log;
@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  * also manages the lifetime of the sensor and location event listeners (through
  * {@link OrientationManager}) so that tracking only occurs when the card is visible.
  */
-public class CompassRenderer implements SurfaceHolder.Callback {
+public class CompassRenderer implements DirectRenderingCallback {
 
     private static final String TAG = CompassRenderer.class.getSimpleName();
 
@@ -64,6 +64,8 @@ public class CompassRenderer implements SurfaceHolder.Callback {
     private RenderThread mRenderThread;
     private int mSurfaceWidth;
     private int mSurfaceHeight;
+
+    private boolean mRenderingPaused;
 
     private final FrameLayout mLayout;
     private final CompassView mCompassView;
@@ -130,28 +132,54 @@ public class CompassRenderer implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        // The creation of a new Surface implicitly resumes the rendering.
+        mRenderingPaused = false;
         mHolder = holder;
-
-        mOrientationManager.addOnChangedListener(mCompassListener);
-        mOrientationManager.start();
-
-        if (mOrientationManager.hasLocation()) {
-            Location location = mOrientationManager.getLocation();
-            List<Place> nearbyPlaces = mLandmarks.getNearbyLandmarks(
-                    location.getLatitude(), location.getLongitude());
-            mCompassView.setNearbyPlaces(nearbyPlaces);
-        }
-
-        mRenderThread = new RenderThread();
-        mRenderThread.start();
+        updateRenderingState();
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        mRenderThread.quit();
+        mHolder = null;
+        updateRenderingState();
+    }
 
-        mOrientationManager.removeOnChangedListener(mCompassListener);
-        mOrientationManager.stop();
+    @Override
+    public void renderingPaused(SurfaceHolder holder, boolean paused) {
+        mRenderingPaused = paused;
+        updateRenderingState();
+    }
+
+    /**
+     * Starts or stops rendering according to the {@link LiveCard}'s state.
+     */
+    private void updateRenderingState() {
+        boolean shouldRender = (mHolder != null) && !mRenderingPaused;
+        boolean isRendering = (mRenderThread != null);
+
+        if (shouldRender != isRendering) {
+            if (shouldRender) {
+                mOrientationManager.addOnChangedListener(mCompassListener);
+                mOrientationManager.start();
+
+                if (mOrientationManager.hasLocation()) {
+                    Location location = mOrientationManager.getLocation();
+                    List<Place> nearbyPlaces = mLandmarks.getNearbyLandmarks(
+                        location.getLatitude(), location.getLongitude());
+                    mCompassView.setNearbyPlaces(nearbyPlaces);
+                }
+
+                mRenderThread = new RenderThread();
+                mRenderThread.start();
+            } else {
+                mRenderThread.quit();
+                mRenderThread = null;
+
+                mOrientationManager.removeOnChangedListener(mCompassListener);
+                mOrientationManager.stop();
+
+            }
+        }
     }
 
     /**
@@ -184,6 +212,7 @@ public class CompassRenderer implements SurfaceHolder.Callback {
         }
 
         if (canvas != null) {
+            canvas.drawColor(Color.BLACK);
             mLayout.draw(canvas);
 
             try {

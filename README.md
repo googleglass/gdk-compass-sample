@@ -14,7 +14,7 @@ screen when the user is within 10 km of those locations. See the
 ## Getting started
 
 Check out our documentation to learn how to get started on
-https://developers.google.com/glass/develop/index
+https://developers.google.com/glass/gdk/index
 
 ## Running the sample on Glass
 

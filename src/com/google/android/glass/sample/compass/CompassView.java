@@ -112,8 +112,7 @@ public class CompassView extends View {
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setAntiAlias(true);
         mPaint.setTextSize(DIRECTION_TEXT_HEIGHT);
-        mPaint.setTypeface(Typeface.createFromFile(new File("/system/glass_fonts",
-                "Roboto-Thin.ttf")));
+        mPaint.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
 
         mTickPaint = new Paint();
         mTickPaint.setStyle(Paint.Style.STROKE);
@@ -126,8 +125,7 @@ public class CompassView extends View {
         mPlacePaint.setAntiAlias(true);
         mPlacePaint.setColor(Color.WHITE);
         mPlacePaint.setTextSize(PLACE_TEXT_HEIGHT);
-        mPlacePaint.setTypeface(Typeface.createFromFile(new File("/system/glass_fonts",
-                "Roboto-Light.ttf")));
+        mPlacePaint.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
 
         mPath = new Path();
         mTextBounds = new Rect();

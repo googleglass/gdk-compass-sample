@@ -25,8 +25,11 @@ import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.lang.Runnable;
 
 /**
  * This activity manages the options menu that appears when the user taps on the compass's live
@@ -34,8 +37,11 @@ import android.view.MenuItem;
  */
 public class CompassMenuActivity extends Activity {
 
+    private final Handler mHandler = new Handler();
+
     private CompassService.CompassBinder mCompassService;
-    private boolean mResumed;
+    private boolean mAttachedToWindow;
+    private boolean mOptionsMenuOpen;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -59,21 +65,21 @@ public class CompassMenuActivity extends Activity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mResumed = true;
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mAttachedToWindow = true;
         openOptionsMenu();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mResumed = false;
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mAttachedToWindow = false;
     }
 
     @Override
     public void openOptionsMenu() {
-        if (mResumed && mCompassService != null) {
+        if (!mOptionsMenuOpen && mAttachedToWindow && mCompassService != null) {
             super.openOptionsMenu();
         }
     }
@@ -91,7 +97,16 @@ public class CompassMenuActivity extends Activity {
                 mCompassService.readHeadingAloud();
                 return true;
             case R.id.stop:
-                stopService(new Intent(this, CompassService.class));
+                // Stop the service at the end of the message queue for proper options menu
+                // animation. This is only needed when starting an Activity or stopping a Service
+                // that published a LiveCard.
+                mHandler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        stopService(new Intent(CompassMenuActivity.this, CompassService.class));
+                    }
+                });
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,6 +116,7 @@ public class CompassMenuActivity extends Activity {
     @Override
     public void onOptionsMenuClosed(Menu menu) {
         super.onOptionsMenuClosed(menu);
+        mOptionsMenuOpen = false;
 
         unbindService(mConnection);
 
