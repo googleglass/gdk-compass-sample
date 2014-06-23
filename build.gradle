@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.6.3'
+		
+    }
+}
+
+apply plugin: 'android'
+
+android {
+    compileSdkVersion "Google Inc.:Glass Development Kit Sneak Peek:15"
+
+    buildToolsVersion "18.0.1"
+
+	sourceSets {
+		main.java.srcDirs = ['src']
+		main.res.srcDirs = ['res']
+		main.manifest.srcFile 'AndroidManifest.xml'
+	}
+	
+	defaultConfig {
+		minSdkVersion 14
+		targetSdkVersion 18
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
