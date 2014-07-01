@@ -134,9 +134,12 @@ public class OrientationManager {
 
                 // Convert the heading (which is relative to magnetic north) to one that is
                 // relative to true north, using the user's current location to compute this.
-                float magneticHeading = (float) Math.toDegrees(mOrientation[0]);
-                mHeading = MathUtils.mod(computeTrueNorth(magneticHeading), 360.0f)
-                        - ARM_DISPLACEMENT_DEGREES;
+                mHeading = MathUtils.mod(computeTrueNorth(magneticHeading), 360.0f) - ARM_DISPLACEMENT_DEGREES;
+                
+                // The user was looking ~ due north (0 - 5.999 degrees)
+                if(mHeading < 0) {
+                	mHeading = 360.0 + mHeading;
+                }
 
                 notifyOrientationChanged();
             }
