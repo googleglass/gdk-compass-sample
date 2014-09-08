@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2013 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name" msgid="3375757321337738261">"Compass"</string>
+  <string-array name="direction_abbreviations">
+    <item msgid="1079238465544108969">"N"</item>
+    <item msgid="2341501751675102493">"NNE"</item>
+    <item msgid="7680761310926491955">"NE"</item>
+    <item msgid="4292816447234620667">"ENE"</item>
+    <item msgid="6418735847551799853">"E"</item>
+    <item msgid="2129811127744651356">"ESE"</item>
+    <item msgid="7771057123989991703">"SE"</item>
+    <item msgid="1928659641501067515">"SSE"</item>
+    <item msgid="5108812361197684477">"S"</item>
+    <item msgid="8924946912411939697">"SSW"</item>
+    <item msgid="309609485886511925">"SW"</item>
+    <item msgid="2883766958225787382">"WSW"</item>
+    <item msgid="110905419381546314">"W"</item>
+    <item msgid="5857526871878971850">"WNW"</item>
+    <item msgid="5844972038207742574">"NW"</item>
+    <item msgid="998446954476845052">"NNW"</item>
+  </string-array>
+    <string name="spoken_heading_format" msgid="6150496444489621015">"<xliff:g id="DEGREES">%1$d</xliff:g> degrees <xliff:g id="DIRECTION">%2$s</xliff:g>"</string>
+    <string name="spoken_heading_format_one" msgid="6740622847176107104">"<xliff:g id="DEGREES">%1$d</xliff:g> degree <xliff:g id="DIRECTION">%2$s</xliff:g>"</string>
+  <string-array name="spoken_directions">
+    <item msgid="2717755441338789737">"north"</item>
+    <item msgid="8519131510885067662">"north north east"</item>
+    <item msgid="3568933995157559702">"north east"</item>
+    <item msgid="8816021994961935234">"east north east"</item>
+    <item msgid="1942419050381467478">"east"</item>
+    <item msgid="9167297595396973501">"east south east"</item>
+    <item msgid="2156716765941357848">"south east"</item>
+    <item msgid="3618414598762472430">"south south east"</item>
+    <item msgid="5766052417014981693">"south"</item>
+    <item msgid="5596560159941430829">"south south west"</item>
+    <item msgid="770276304180920920">"south west"</item>
+    <item msgid="5974208235826343530">"west south west"</item>
+    <item msgid="3717634774778045470">"west"</item>
+    <item msgid="5345577649483165614">"west north west"</item>
+    <item msgid="2243263699373462457">"north west"</item>
+    <item msgid="1668146890609710484">"north north west"</item>
+  </string-array>
+    <string name="place_text_format" msgid="4086923103710767693">"%1$s (%2$s km)"</string>
+    <string name="pitch_too_steep" msgid="4259559584623432044">"Keep Glass horizontal to use the compass"</string>
+    <string name="magnetic_interference" msgid="1805359734007375316">"Glass is detecting too much interference"</string>
+</resources>

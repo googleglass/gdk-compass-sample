@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2013 The Android Open Source Project
+<!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
      limitations under the License.
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/read_aloud"
-        android:title="@string/read_aloud"
-        android:icon="@drawable/ic_read_aloud"/>
-    <item
-        android:id="@+id/stop"
-        android:title="@string/stop"
-        android:icon="@drawable/ic_stop"/>
-</menu>
+<resources>
+
+    <!-- Contextual menu commands. The system automatically maps
+         these literals to the appropriate touch or voice commands.
+         No localization required. -->
+    <string name="read_aloud">READ_ALOUD</string>
+    <string name="stop_this">STOP_THIS</string>
+
+</resources>

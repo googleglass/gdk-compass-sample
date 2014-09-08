@@ -14,12 +14,14 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Launch-related strings. -->
-    <string name="app_name">Compass Sample</string>
+    <!-- Application name for the Compass. The name could appear in the disambiguation
+        menu. [CHAR LIMIT=30] -->
+    <string name="app_name">Compass</string>
 
-    <!-- Strings describing locations. -->
+    <!-- Abbreviations for the 16 compass points, starting at north and going clockwise 22.5 degrees
+        at each step. [CHAR LIMIT=3] -->
     <string-array name="direction_abbreviations">
         <item>N</item>
         <item>NNE</item>
@@ -39,10 +41,12 @@
         <item>NNW</item>
     </string-array>
 
-    <!-- Spoken strings. -->
-    <string name="spoken_heading_format">%1$d degrees %2$s</string>
-    <string name="spoken_heading_format_one">%1$d degree %2$s</string>
-    <string name="place_text_format">%1$s (%2$s km)</string>
+    <!-- Spoken text -->
+    <!-- Spoken message for the user's current compass heading, when degrees is not equal to 1. For example, "45 degrees northeast". [CHAR LIMIT=none] -->
+    <string name="spoken_heading_format"><xliff:g id="degrees">%1$d</xliff:g> degrees <xliff:g id="direction">%2$s</xliff:g></string>
+    <!-- Spoken message for the user's current compass heading, when degrees is equal to 1. [CHAR LIMIT=none] -->
+    <string name="spoken_heading_format_one"><xliff:g id="degrees">%1$d</xliff:g> degree <xliff:g id="direction">%2$s</xliff:g></string>
+    <!-- Spoken versions of the 16 compass points, in the same order as the direction_abbreviations array above. [CHAR LIMIT=none] -->
     <string-array name="spoken_directions">
         <item>north</item>
         <item>north north east</item>
@@ -62,12 +66,12 @@
         <item>north north west</item>
     </string-array>
 
-    <!-- Warning messages. -->
+    <!-- Tips and other labels -->
+    <!-- Label displayed next to landmark pins that shows the name of the landmark and its distance in kilometers. [CHAR LIMIT=45] -->
+    <string name="place_text_format">%1$s (%2$s km)</string>
+    <!-- Tip message warning the user to keep Glass horizontal to use the compass. [CHAR LIMIT=45] -->
     <string name="pitch_too_steep">Keep Glass horizontal to use the compass</string>
+    <!-- Tip message warning the user that Glass is detecting too much magnetic interference to be accurate. [CHAR LIMIT=45] -->
     <string name="magnetic_interference">Glass is detecting too much interference</string>
-
-    <!-- Menu item strings. -->
-    <string name="read_aloud">Read aloud</string>
-    <string name="stop">Stop</string>
 
 </resources>

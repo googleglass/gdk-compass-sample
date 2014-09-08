@@ -115,13 +115,21 @@ public class CompassService extends Service {
             mRenderer = new CompassRenderer(this, mOrientationManager, mLandmarks);
 
             mLiveCard.setDirectRenderingEnabled(true).getSurfaceHolder().addCallback(mRenderer);
+            mLiveCard.setVoiceActionEnabled(true);
 
             // Display the options menu when the live card is tapped.
             Intent menuIntent = new Intent(this, CompassMenuActivity.class);
             menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
             mLiveCard.attach(this);
-            mLiveCard.publish(PublishMode.REVEAL);
+
+            // Only reveal the card if the service was started explicitly by the user. If the
+            // service dies in the background from some sort of error, we can recover when the
+            // system restarts it automatically (because the compass is stateless), but we don't
+            // want to disrupt the user by revealing the live card from out of nowhere. We detect
+            // whether this was an automated restart by checking if the intent is null, and if so,
+            // we publish silently instead.
+            mLiveCard.publish((intent == null) ? PublishMode.SILENT : PublishMode.REVEAL);
         } else {
             mLiveCard.navigate();
         }
